@@ -30,7 +30,7 @@ function All_Awail_Basket({ list }) {
                     </span>
                   </div>
                 )}
-                <span className="text-sm font-medium">{item.title}</span>
+                <span className="text-sm font-medium">{item.basket_name}</span>
               </div>
             </Link>
           ))}

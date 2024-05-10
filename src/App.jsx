@@ -10,14 +10,16 @@ import BasketDetils from "./components/BasketDetils";
 
 import Basket from "./components/Basket";
 import Test_Basket from "./components/Test_Basket";
+import MpopularBasket_details from "./components/MpopularBasket_details";
 
 const App = () => {
   return (
     <>
       <Routes>
         {/* i want to show most of the component on the home page so i add all component on DashBoard component  then its route on home component  */}
-        <Route path="/" element={<DashBoard />}></Route>
+        <Route path="/" element={<DashBoard />} />
         <Route path="/:id" element={<BasketDetils />} />
+        <Route path="/popular_basket" element={<MpopularBasket_details />} />
       </Routes>
 
       {/* <BasketDetils /> */}

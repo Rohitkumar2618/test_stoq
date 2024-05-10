@@ -111,10 +111,7 @@ function BasketDetails() {
             <h3 className="text-red-400 font-bold">Stock</h3>
             <h3 className="text-red-400 font-bold">Weight</h3>
           </div>
-          <div
-            className="overflow-y-auto *: "
-            style={{ maxHeight: "200px" }} // Adjust the max-height as per your requirement
-          >
+          <div className="overflow-y-auto *: " style={{ maxHeight: "200px" }}>
             {loading ? (
               <div className="flex items-center justify-center mt-3">
                 <Grid
