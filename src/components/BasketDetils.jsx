@@ -1,27 +1,61 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { FallingLines } from "react-loader-spinner";
+import { Grid } from "react-loader-spinner";
+function BasketDetails() {
+  // State to store fetched basket data
+  const [baskets, setBaskets] = useState([]);
+  // State to track loading state for baskets
+  const [loading, setLoading] = useState(true);
 
-function BasketDetils() {
-  const products = [
-    { name: "Product 1", weight: "123" },
-    { name: "Product 2", weight: "456" },
-    { name: "Product 3", weight: "789" },
-    { name: "Product 4", weight: "234" },
-    { name: "Product 5", weight: "567" },
-    { name: "Product 6", weight: "890" },
-    { name: "Product 7", weight: "123" },
-    { name: "Product 8", weight: "456" },
-    { name: "Product 9", weight: "789" },
-    { name: "Product 10", weight: "234" },
-    { name: "Product 11", weight: "567" },
-    { name: "Product 12", weight: "890" },
-  ];
+  const products = baskets.map((basket) => ({
+    name: basket.basket_name,
+    weight: basket.fund_required,
+  }));
 
-  const data = [
-    { title: "Annual Return", percent: "54%" },
-    { title: "3 year CAGR ", percent: "54%" },
-    { title: "Succesfull Rate ", percent: "51%" },
-    { title: "Annual C", percent: "58%" },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          "https://centrum-backend.vercel.app/login/admin/dashboard/ALL",
+          {
+            headers: {
+              Authorization: "Basic QTE6dGhpc2lzYWRtaW4=",
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+        const data = await response.json();
+        console.log("API response:", data); // Log the entire response
+        if (
+          !data ||
+          !data.data ||
+          !data.data.basket_data ||
+          Object.keys(data.data.basket_data).length === 0
+        ) {
+          throw new Error("No basket data found");
+        }
+        // Convert basket_data object to an array of objects
+        const basketsArray = Object.entries(data.data.basket_data).map(
+          ([basketId, basketData]) => ({
+            id: basketId,
+            ...basketData,
+          })
+        );
+        setBaskets(basketsArray); // Corrected function name
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+
+    // Scroll to the top when the component mounts
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   function handleForm(e) {
     e.preventDefault(); // Prevent default form submission behavior
@@ -37,19 +71,28 @@ function BasketDetils() {
 
       {/* $ Boxes Code */}
       <div className="p-3 flex flex-wrap gap-5 items-center justify-center">
-        {data.map((item, index) => (
-          <div
-            key={index}
-            className="w-32 h-32 flex flex-col items-center justify-center bg-zinc-300 rounded-md"
-          >
-            <h1>{item.title}</h1>
-            <h1>{item.percent}</h1>
-          </div>
-        ))}
+        {loading ? (
+          <FallingLines
+            color="#4fa94d"
+            width="100"
+            visible={true}
+            ariaLabel="falling-circles-loading"
+          />
+        ) : (
+          baskets.map((basket, index) => (
+            <div
+              key={index}
+              className="w-32 h-32 flex flex-col bg-zinc-300 rounded-md"
+            >
+              <h1 className="p-5">{basket.basket_name}</h1>
+              <h1>{basket.annual_returns}</h1>
+            </div>
+          ))
+        )}
       </div>
       {/* Why we want to invest wala code */}
       <div className="p-3">
-        <h3 className=" font-semibold mb-3">Why to invest in this basket</h3>
+        <h3 className="font-semibold mb-3">Why to invest in this basket</h3>
         <p>
           Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repudiandae
           minus quis itaque, atque expedita nulla sapiente provident cumque
@@ -59,37 +102,52 @@ function BasketDetils() {
       </div>
 
       {/* Stocks and weight Code  */}
-      <div>
+      <div className="">
         <span className="font-semibold p- text-2xl">
           <h3 className="p-3">Stocks & Weights</h3>
         </span>
-        <div>
-          <div className="flex justify-center items-center p-3 text-red-400 gap-40">
-            <h3>Stock</h3>
-            <h3>Weight</h3>
+        <div className=" p-5">
+          <div className="flex justify-center items-center p-3 gap-40">
+            <h3 className="text-red-400 font-bold">Stock</h3>
+            <h3 className="text-red-400 font-bold">Weight</h3>
           </div>
           <div
-            className="overflow-y-auto"
+            className="overflow-y-auto *: "
             style={{ maxHeight: "200px" }} // Adjust the max-height as per your requirement
           >
-            {products.map((product, index) => (
-              <div
-                key={index}
-                className="flex justify-center items-center mt-5 gap-40"
-              >
-                <h3>{product.name}</h3>
-                <h3> ₹ {product.weight}</h3>
+            {loading ? (
+              <div className="flex items-center justify-center mt-3">
+                <Grid
+                  visible={true}
+                  height="80"
+                  width="80"
+                  color="#4fa94d"
+                  ariaLabel="grid-loading"
+                  radius="12.5"
+                  wrapperStyle={{}}
+                  wrapperClass="grid-wrapper"
+                />
               </div>
-            ))}
+            ) : (
+              products.map((product, index) => (
+                <div
+                  key={index}
+                  className="flex justify-between items-center mt-5 p-2 bg-gray-100 rounded-md"
+                >
+                  <h3 className="text-gray-800">{product.name}</h3>
+                  <h3 className="text-gray-800">₹ {product.weight}</h3>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>
 
       {/* About the manager code */}
 
-      <div className="mt-32 p-3  ">
+      <div className="mt-32 p-3">
         <span>
-          <h1 className="mb-3 text-xl font-bold "> About the Manager </h1>
+          <h1 className="mb-3 text-xl font-bold"> About the Manager </h1>
         </span>
 
         <div className="bg-zinc-300 rounded-lg shadow-md overflow-hidden p-3">
@@ -115,12 +173,12 @@ function BasketDetils() {
             <div className="mt-4">
               <p className="text-gray-500 text-sm">+ 6 more strategies</p>
             </div>
-            <div className="mt-6  flex gap-20 ">
+            <div className="mt-6 flex gap-20">
               <a className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
                 View manager details &gt;
               </a>
 
-              <a className="text-sm font-medium text-zinc-800 ">Disclosures</a>
+              <a className="text-sm font-medium text-zinc-800">Disclosures</a>
             </div>
           </div>
         </div>
@@ -137,7 +195,7 @@ function BasketDetils() {
           </div>
         </div>
         <button
-          className="  w-full  h-full mt-3 px-3 py-1 rounded-md text-white font-bold text-1xl bg-blue-700"
+          className="w-full h-full mt-3 px-3 py-1 rounded-md text-white font-bold text-1xl bg-blue-700"
           onClick={handleForm}
         >
           Invest Now
@@ -147,4 +205,4 @@ function BasketDetils() {
   );
 }
 
-export default BasketDetils;
+export default BasketDetails;

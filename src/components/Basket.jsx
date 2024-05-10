@@ -12,16 +12,45 @@ function Basket() {
 
   // Fetch basket data from the API
   useEffect(() => {
-    fetch("https://centrum-backend.vercel.app/basket_example")
-      .then((response) => response.json())
-      .then((data) => {
-        setBaskets(data);
-        setLoading(false); // Set loading to false when data is fetched
-      })
-      .catch((error) => {
-        console.error("Error fetching baskets:", error);
-        setLoading(false); // Set loading to false in case of error
-      });
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          "https://centrum-backend.vercel.app/login/admin/dashboard/ALL",
+          {
+            headers: {
+              Authorization: "Basic QTE6dGhpc2lzYWRtaW4=",
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+        const data = await response.json();
+        // console.log("API response:", data); // Log the entire response
+        if (
+          !data ||
+          !data.data ||
+          !data.data.basket_data ||
+          Object.keys(data.data.basket_data).length === 0
+        ) {
+          throw new Error("No basket data found");
+        }
+        // Convert basket_data object to an array of objects
+        const basketsArray = Object.entries(data.data.basket_data).map(
+          ([basketId, basketData]) => ({
+            id: basketId,
+            ...basketData,
+          })
+        );
+        setBaskets(basketsArray); // Corrected function name
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (
@@ -58,10 +87,10 @@ function Basket() {
                       {" "}
                       {/* Allow description to truncate */}
                       <h1 className="text-black font-semibold text-lg mb-2">
-                        {basket.name}
+                        {basket.basket_name}
                       </h1>
                       <p className="text-black text-sm line-clamp-3">
-                        {basket.description}
+                        {basket.basket_description}
                       </p>
                     </div>
                     <div>
