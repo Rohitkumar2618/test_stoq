@@ -2,18 +2,18 @@ import React from "react";
 
 function BasketDetils() {
   const products = [
-    { name: "Product 1", weight: "$123" },
-    { name: "Product 2", weight: "$456" },
-    { name: "Product 3", weight: "$789" },
-    { name: "Product 4", weight: "$234" },
-    { name: "Product 5", weight: "$567" },
-    { name: "Product 6", weight: "$890" },
-    { name: "Product 7", weight: "$123" },
-    { name: "Product 8", weight: "$456" },
-    { name: "Product 9", weight: "$789" },
-    { name: "Product 10", weight: "$234" },
-    { name: "Product 11", weight: "$567" },
-    { name: "Product 12", weight: "$890" },
+    { name: "Product 1", weight: "123" },
+    { name: "Product 2", weight: "456" },
+    { name: "Product 3", weight: "789" },
+    { name: "Product 4", weight: "234" },
+    { name: "Product 5", weight: "567" },
+    { name: "Product 6", weight: "890" },
+    { name: "Product 7", weight: "123" },
+    { name: "Product 8", weight: "456" },
+    { name: "Product 9", weight: "789" },
+    { name: "Product 10", weight: "234" },
+    { name: "Product 11", weight: "567" },
+    { name: "Product 12", weight: "890" },
   ];
 
   const data = [
@@ -22,6 +22,12 @@ function BasketDetils() {
     { title: "Succesfull Rate ", percent: "51%" },
     { title: "Annual C", percent: "58%" },
   ];
+
+  function handleForm(e) {
+    e.preventDefault(); // Prevent default form submission behavior
+    const basketMultiple = document.getElementById("basketMultiple").value; // Corrected to get element by id
+    console.log(basketMultiple); // Log the value to the console
+  }
 
   return (
     <>
@@ -72,7 +78,7 @@ function BasketDetils() {
                 className="flex justify-center items-center mt-5 gap-40"
               >
                 <h3>{product.name}</h3>
-                <h3>{product.weight}</h3>
+                <h3> ₹ {product.weight}</h3>
               </div>
             ))}
           </div>
@@ -119,20 +125,23 @@ function BasketDetils() {
           </div>
         </div>
 
-        <div className="flex gap-3 mt-3">
+        <div className="flex gap-3 mt-5">
           <div className="flex items-center">
             <h1 className="font-bold mr-2">Basket Multiple :</h1>
             <input
+              id="basketMultiple" // Add id attribute
               type="text"
               className="border-2 border-red-500 px-2 py-1 rounded-md"
               placeholder="Enter multiple of Basket"
             />
           </div>
-
-          <button className=" px-2 py-1 rounded-md text-white font-bold text-1xl bg-blue-700">
-            Invest Now
-          </button>
         </div>
+        <button
+          className="  w-full  h-full mt-3 px-3 py-1 rounded-md text-white font-bold text-1xl bg-blue-700"
+          onClick={handleForm}
+        >
+          Invest Now
+        </button>
       </div>
     </>
   );
