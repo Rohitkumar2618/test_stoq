@@ -1,9 +1,11 @@
+import { useParams } from "react-router-dom";
 import All_Awail_Basket from "./All_Awail_Basket";
 import Basket from "./Basket";
 import Mpopular_Basket from "./Mpopular_Basket";
 import { useState, useEffect } from "react";
 
 function DashBoard() {
+  let { name } = useParams();
   const [basketsData, setBasketsData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -64,8 +66,8 @@ function DashBoard() {
           </p>
           <div className="px-5 py-5 flex mt-5 bg-zinc-200 rounded-md border border-blue-500">
             <div className="flex flex-grow ">
-              <span className="font-bold flex-1">Overall investment:</span>
-              <h1 className="text-1xl flex-1"> ₹ 50000</h1>
+              <span className="font-semibold flex-1">Overall investment:</span>
+              <h1 className="text-2xl flex-1  font-bold "> ₹ 50000</h1>
             </div>
           </div>
         </div>

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { FallingLines } from "react-loader-spinner";
 import { Grid } from "react-loader-spinner";
+import { useParams } from "react-router-dom";
 function BasketDetails() {
+  let { id } = useParams("");
   // State to store fetched basket data
   const [baskets, setBaskets] = useState([]);
   // State to track loading state for baskets
@@ -43,7 +45,9 @@ function BasketDetails() {
             ...basketData,
           })
         );
-        setBaskets(basketsArray); // Corrected function name
+        setBaskets(basketsArray);
+
+        // Corrected function name
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -59,14 +63,14 @@ function BasketDetails() {
 
   function handleForm(e) {
     e.preventDefault(); // Prevent default form submission behavior
-    const basketMultiple = document.getElementById("basketMultiple").value; // Corrected to get element by id
+    const basketMultiple = document.getElementById("basketMultiple").value;
     console.log(basketMultiple); // Log the value to the console
   }
 
   return (
     <>
       <div className="p-10 font-bold text-2xl">
-        <h1 className="text-3xl">Banking</h1>
+        <h1 className="text-1xl">Basket Name: {name}</h1>
       </div>
 
       {/* $ Boxes Code */}

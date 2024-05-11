@@ -74,7 +74,7 @@ function Mpopular_Basket() {
               ) : (
                 basketsData.map((basket, index) => (
                   <div key={basket.id} className="flex-shrink-0">
-                    <Link to={`/basket/${index}`}>
+                    <Link to={`/popular_basket/${index}`}>
                       {" "}
                       {/* Wrap the card with Link */}
                       <NextUICard
